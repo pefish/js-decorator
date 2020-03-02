@@ -18,7 +18,17 @@ export default function retry(times: number, errContainStr: string, interval: nu
             const result = await fun.apply(that, args)
             resolve(result)
           } catch (err) {
-            if (err.message.indexOf(errContainStr) !== -1 && times > 0) {
+            let errorMessage
+            if (err instanceof Error) {
+              errorMessage = err.message
+            } else if (err instanceof String) {
+              errorMessage = err
+            }
+            if (!errorMessage) {
+              reject(err)
+              return
+            }
+            if (errorMessage.indexOf(errContainStr) !== -1 && times > 0) {
               times--
               await TimeUtil.sleep(interval)
               await attempt()
