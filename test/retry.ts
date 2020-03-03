@@ -3,12 +3,13 @@ import { retry } from '../src/index'
 export default class Test {
   a: number = 0
 
-  @retry(6, `haha`)
+  @retry(6, [`haha`, `xixi`])
   async test (a: string): Promise<string> {
     this.a++
-    throw new Error(`4351`)
+    console.log(this.a)
+    // throw new Error(`4351`)
     if (this.a !== 5) {
-      throw new Error(`haha`)
+      throw new Error(`xixi`)
     }
     return `1212`
   }
