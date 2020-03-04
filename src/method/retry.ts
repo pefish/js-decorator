@@ -1,5 +1,5 @@
 import TimeUtil from "@pefish/js-util-time";
-
+import util from 'util'
 
 /**
  * 函数重试。函数返回字符串 retry 则重试。只能修饰异步函数
@@ -18,16 +18,16 @@ export default function retry(times: number, errContainStrs: string[], interval:
             const result = await fun.apply(that, args)
             resolve(result)
           } catch (err) {
-            let errorMessage
-            if (err instanceof Error) {
-              errorMessage = err.message
-            } else if (err instanceof String) {
-              errorMessage = err
-            }
-            if (!errorMessage) {
-              reject(err)
-              return
-            }
+            let errorMessage = util.inspect(err, false, 5)
+            // if (err instanceof Error) {
+            //   errorMessage = err.message
+            // } else if (err instanceof String) {
+            //   errorMessage = err
+            // }
+            // if (!errorMessage) {
+            //   reject(err)
+            //   return
+            // }
             let isRetry = false
             for (const str of errContainStrs) {
               if (errorMessage.indexOf(str) !== -1) {
